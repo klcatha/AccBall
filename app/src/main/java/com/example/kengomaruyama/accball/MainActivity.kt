@@ -17,6 +17,15 @@ class MainActivity : AppCompatActivity(), SensorEventListener
     private var surfaceWidth: Int = 0
     private var surfaceHeight: Int = 0
 
+    private val radius = 50.0f;
+    private val coef = 50.0f
+
+    private var ballx: Float = 0f
+    private var bally: Float = 0f
+    private var vx: Float = 0f
+    private var vy: Float = 0f
+    private var time: Long = 0L
+
     override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
         surfaceWidth = width
         surfaceHeight = height
