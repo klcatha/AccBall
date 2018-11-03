@@ -1,6 +1,7 @@
 package com.example.kengomaruyama.accball
 
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.graphics.Paint
 import android.hardware.Sensor
@@ -103,6 +104,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_main)
         val holder = surfaceView.holder
         holder.addCallback(this)
