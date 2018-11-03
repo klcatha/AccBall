@@ -1,6 +1,8 @@
 package com.example.kengomaruyama.accball
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.Paint
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -29,6 +31,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener
     override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
         surfaceWidth = width
         surfaceHeight = height
+        ballx = (width / 2).toFloat()
+        bally = (height / 2).toFloat()
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder?) {
@@ -52,12 +56,49 @@ class MainActivity : AppCompatActivity(), SensorEventListener
 
     override fun onSensorChanged(event: SensorEvent?) {
         if (event == null) return
-        if (event.sensor.type == Sensor.TYPE_ACCELEROMETER){
-            Log.d("MainActivity",
-                    "x = ${event.values[0].toString()}" +
-                            ",y = ${event.values[1].toString()}" +
-                            ",z = ${event.values[2].toString()}")
+
+        if (time == 0L) time = System.currentTimeMillis()
+        if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
+            val x = -event.values[0]
+            val y = event.values[1]
+
+            var t = (System.currentTimeMillis() - time).toFloat()
+            time = System.currentTimeMillis()
+            t /= 1000.0f
+
+            val dx = vx * t + x * t * t / 2.0f
+            val dy = vy * t + y * t * t / 2.0f
+            ballx += dx * coef
+            bally += dy * coef
+            vx += x * t
+            vy += y * t
+
+            if (ballx - radius < 0 && vx < 0){
+                vx = -vx / 1.5f
+                ballx = radius
+            } else if (ballx + radius > surfaceWidth && vx > 0) {
+                vx = -vx / 1.5f
+                ballx = surfaceWidth - radius
+            }
+            if (ballx - radius < 0 && vy < 0) {
+                vy = -vy / 1.5f
+                bally = radius
+            } else if (bally + radius > surfaceHeight && vy > 0) {
+                vy = -vy / 1.5f
+                bally = surfaceHeight - radius
+            }
+
+            drawCanvas()
         }
+    }
+
+    private fun drawCanvas() {
+        val canvas = surfaceView.holder.lockCanvas()
+        canvas.drawColor(Color.YELLOW)
+        canvas.drawCircle(ballx,bally,radius, Paint().apply {
+            color = Color.MAGENTA
+        })
+        surfaceView.holder.unlockCanvasAndPost(canvas)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
