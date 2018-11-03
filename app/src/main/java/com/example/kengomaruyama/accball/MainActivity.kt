@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener
     private var surfaceHeight: Int = 0
 
     private val radius = 50.0f;
-    private val coef = 50.0f
+    private val coef = 1000.0f
 
     private var ballx: Float = 0f
     private var bally: Float = 0f
@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener
                 vx = -vx / 1.5f
                 ballx = surfaceWidth - radius
             }
-            if (ballx - radius < 0 && vy < 0) {
+            if (bally - radius < 0 && vy < 0) {
                 vy = -vy / 1.5f
                 bally = radius
             } else if (bally + radius > surfaceHeight && vy > 0) {
