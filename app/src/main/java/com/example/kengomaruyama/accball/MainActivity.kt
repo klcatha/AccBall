@@ -30,4 +30,11 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 this, accSensor,
                 SensorManager.SENSOR_DELAY_GAME)
     }
+
+    override fun onPause() {
+        super.onPause()
+        val sensorManager = getSystemService(Context.SENSOR_SERVICE)
+            as SensorManager
+        sensorManager.unregisterListener(this)
+    }
 }
